@@ -8,7 +8,12 @@ In  this tutorial we are going to see how microservices communicate with each ot
     - Direct: Microservice A speaks with  Microservice B Directly
     - Via Gateway: Instead of taking directly, Microservice A speaks with  Microservice B via gateway 
 - This tutorial covers both the scenarios
-
+- We will be developing report api which gives employee name,salary by communicating with employee-api,payroll-api
+- For the purpose of this tutorial we developed two microservices
+    - report-api-direct which calls employee-api,payroll-api directly
+    - report-api-via-gateway calls employee-api,payroll-api via gateway
+- **Note: In real world we favour to call microservices via a gateway even for inter communication. So I recommend using 
+the  microservice report-api-via-gateway**  
 Overview
 - Run registry service on 8761. 
 - Run employee-api service on dynamic port. Where it takes employee id and returns employee name.
@@ -57,15 +62,9 @@ Spring Cloud Load balaner in gateway
 # Using curl to test environment
 **Note I am running CURL on windows, if you have any issue. Please use postman client, its collection is available 
 at spring-cloud-session-3-inter-microservice-communication-sync.postman_collection.json**
-- Access employee api via gateway: ``` curl -s -L  http://localhost:8080/employee/100 ```
-- Access payroll api via gateway: ``` curl -s -L  http://localhost:8080/payroll/100 ```
-**Note: Users will not access microservices (employee-api,payroll-api,insurance-api) directly. This will always access 
-via gateway, Also we never know which ports they bind. They get random port numbers**
-# Scale up application
-Run multiple instances of employee-api,payroll-api to handle more volume of requests.
-- New Employee API instance: ``` java -jar .\employee-api\target\employee-api-0.0.1-SNAPSHOT.jar ```
-- New Payroll API instance: ``` java -jar .\payroll-api\target\payroll-api-0.0.1-SNAPSHOT.jar ```
-
+- Get employee report using report api ( direct): ``` curl -s -L  http://localhost:8080/report-api-direct/100 ```
+- Get employee report using report-api-via-gateway: ``` curl -s -L  http://localhost:8080/report-api-via-gateway/100 ```
+**Note:  **
 # Code
 *Registry(Service Registry)* is a Spring Boot application that uses Eureka Server. Snippet of **RegistryApplication**
 ```java
