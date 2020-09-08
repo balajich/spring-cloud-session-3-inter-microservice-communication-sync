@@ -1,10 +1,13 @@
-# Spring Cloud Session 2 Microservices Dynamic ports
-In this tutorial we are going build micorservice which bind to random port and discover each other using registry. This 
-is very useful when you want to dynamically scale applications. Here microservices(employee-api,payroll-api), registry 
-services are exposed  via gateway. User will access the services via gateway. All the services are developed using Java. 
-The microservices run on random port and registers their service endpoint with service registry application.
-Gateway routes the requests to micorservices based on the information available in registry.  
-**If you are not able to understand the first paragraph this is perfectly normal,Please watch my video to understand it better**
+# Spring Cloud Session 3 Inter Microservice Communication Synchronous
+In  this tutorial we are going to see how microservices communicate with each other. 
+-There are two types of communication between microservice one is synchronous, and the other is asynchronous.
+- In synchronous communication calling microservice **waits** till the called microservice responds.
+- In asynchronous communication calling microservice will **not wait** till the called microservice responds.
+- In this session we focus on Synchronous communication.
+- There are two ways a microservice can communicate with other microservices
+    - Direct: Microservice A speaks with  Microservice B Directly
+    - Via Gateway: Instead of taking directly, Microservice A speaks with  Microservice B via gateway 
+- This tutorial covers both the scenarios
 
 Overview
 - Run registry service on 8761. 
@@ -12,28 +15,24 @@ Overview
 - Run payroll-api service on dynamic port. Where it takes employee id and returns employee salary.
 - Run report-api-direct service on dynamic port. Where it takes employee id and returns employee name and salary by 
 directly communicating with employee-api and payroll-api.
-- Run Gateway service on 8080 and reverse proxy requests to all the services (employee-api,payroll-api,report-api-direct)
-- All the microservices (employee-api,payroll-api,gateway) when they startup they register their service endpoint (rest api url)
+- Run report-api-via-gateway service on dynamic port. Where it takes employee id and returns employee name and salary by 
+directly communicating with employee-api and payroll-api indirectly via gateway.
+- Run Gateway service on 8080 and reverse proxy requests to all the services (employee-api,payroll-api,report-api-direct,report-api-via-gateway)
+- All the microservices (employee-api,payroll-api,report-api-direct,report-api-via-gateway,gateway) when they startup they register their service endpoint (rest api url)
  with registry
 - Gateway Spring Cloud load balancer (Client side load balancing) component in Spring Cloud Gateway acts as reverse proxy.
 It reads a registry for microservice endpoints and configures routes. 
 
 Important Notes
 - Netflix Eureka Server plays a role of Registry. Registry is a spring boot application with Eureka Server as dependency.
-- Netflix Eureka Client is present in all the micro services (employee-api,payroll-api,gateway) and they discover Eureka
+- Netflix Eureka Client is present in all the micro services (employee-api,payroll-api,report-api-direct,report-api-via-gateway,gateway) and they discover Eureka
 server and register their availability with server.
 - Generally Netflix Ribbon Component is used as Client Side load balancer, but it is deprecated project. We will be using
 Spring Cloud Load balaner in gateway 
-
  
-What is covered ?
-- Develop restapi microservices in Java using springboot 
-- Develop registry using Eureka Server
-- Develop ApiGateway microservice using Spring Cloud Load Balancer.
-- Microservices can be dynamically discovered.
 
 # Source Code 
-``` git clone https://github.com/balajich/spring-cloud-session-2-microservices-dynamic-ports.git ``` 
+``` git clone https://github.com/balajich/spring-cloud-session-3-inter-microservice-communication-sync.git``` 
 # Video
 [![Spring Cloud Session 2 Microservices Dynamic ports](https://img.youtube.com/vi/5WuallBaMnw/0.jpg)](https://www.youtube.com/watch?v=5WuallBaMnw)
 - https://youtu.be/5WuallBaMnw
@@ -57,7 +56,7 @@ What is covered ?
 
 # Using curl to test environment
 **Note I am running CURL on windows, if you have any issue. Please use postman client, its collection is available 
-at spring-cloud-session-1-microservices-introduction.postman_collection.json**
+at spring-cloud-session-3-inter-microservice-communication-sync.postman_collection.json**
 - Access employee api via gateway: ``` curl -s -L  http://localhost:8080/employee/100 ```
 - Access payroll api via gateway: ``` curl -s -L  http://localhost:8080/payroll/100 ```
 **Note: Users will not access microservices (employee-api,payroll-api,insurance-api) directly. This will always access 
