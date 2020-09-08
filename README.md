@@ -69,8 +69,8 @@ at spring-cloud-session-3-inter-microservice-communication-sync.postman_collecti
 # Code
 In this section will focus only on report-api and how discovers employee-api,payroll-api. 
 
-*ReportController* in app report-api-direct. RestTemplate calls eureka ribbon client which fetches "employee-api,payroll-api" information from registry 
-and calls the microservices directly. The ** @LoadBalanced** annotation makes ribbon client to round-robbin requests if there are multiple instances of them.
+*ReportController* in app **report-api-direct**. RestTemplate calls eureka ribbon client which fetches "employee-api,payroll-api" information from registry 
+and calls the microservices directly. The **@LoadBalanced** annotation makes ribbon client to round-robbin requests if there are multiple instances of them.
 ```java
 @Autowired
     RestTemplate restTemplate;
@@ -91,8 +91,8 @@ and calls the microservices directly. The ** @LoadBalanced** annotation makes ri
         return new RestTemplate();
     }
 ```
-*ReportController* in app report-api-via-gatewat. RestTemplate calls eureka ribbon client which fetches "gateway" information from registry 
-and calls the employee,payroll api via gateway. The ** @LoadBalanced** annotation makes ribbon client to round-robbin requests if there are multiple instances of them.
+*ReportController* in app **report-api-via-gateway**. RestTemplate calls eureka ribbon client which fetches "gateway" information from registry 
+and calls the employee,payroll api via gateway. The **@LoadBalanced** annotation makes ribbon client to round-robbin requests if there are multiple instances of them.
 ```java
   @Autowired
     RestTemplate restTemplate;
