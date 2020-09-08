@@ -65,9 +65,10 @@ Spring Cloud Load balaner in gateway
 at spring-cloud-session-3-inter-microservice-communication-sync.postman_collection.json**
 - Get employee report using report api ( direct): ``` curl -s -L  http://localhost:8080/report-api-direct/100 ```
 - Get employee report using report-api-via-gateway: ``` curl -s -L  http://localhost:8080/report-api-via-gateway/100 ```
-**Note:  **
+**Note: In real world we favour to call microservices via a gateway even for inter communication. So I recommend using 
+the  microservice report-api-via-gateway**  
 # Code
-In this section will focus only on report-api and how discovers employee-api,payroll-api. 
+In this section will focus only on report-api and how communicates employee-api,payroll-api. 
 
 *ReportController* in app **report-api-direct**. RestTemplate calls eureka ribbon client which fetches "employee-api,payroll-api" information from registry 
 and calls the microservices directly. The **@LoadBalanced** annotation makes ribbon client to round-robbin requests if there are multiple instances of them.
