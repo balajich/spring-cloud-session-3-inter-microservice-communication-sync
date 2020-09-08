@@ -51,6 +51,7 @@ What is covered ?
 - Registry: ``` java -jar .\registry\target\registry-0.0.1-SNAPSHOT.jar ```
 - Employee API: ``` java -jar .\employee-api\target\employee-api-0.0.1-SNAPSHOT.jar ```
 - Payroll API: ``` java -jar .\payroll-api\target\payroll-api-0.0.1-SNAPSHOT.jar ```
+- Report API Direct: ``` java -jar .\report-api-direct\target\report-api-direct-0.0.1-SNAPSHOT.jar ```
 - Gateway: ``` java -jar .\gateway\target\gateway-0.0.1-SNAPSHOT.jar ``` 
 
 # Using curl to test environment

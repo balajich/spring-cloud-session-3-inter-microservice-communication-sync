@@ -19,7 +19,7 @@ public class ReportController {
     @Autowired
     RestTemplate restTemplate;
 
-    @RequestMapping(value = "/report/{employeeId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/report-api-direct/{employeeId}", method = RequestMethod.GET)
     public Employee getEmployeeDetails(@PathVariable int employeeId) {
         logger.info(String.format("Getting Complete Details of Employee with id %s", employeeId));
         //Get employee name from employee-api
