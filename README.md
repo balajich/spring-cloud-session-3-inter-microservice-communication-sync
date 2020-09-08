@@ -146,6 +146,7 @@ cloud:
 
 # References
 - Spring Microservices in Action by John Carnell 
-- Hands-On Microservices with Spring Boot and Spring Cloud: Build and deploy Java microservices using Spring Cloud, Istio, and Kubernetes
+- Hands-On Microservices with Spring Boot and Spring Cloud: Build and deploy Java microservices 
+using Spring Cloud, Istio, and Kubernetes -Magnus Larsson 
 # Next Tutorial
 https://github.com/balajich/spring-cloud-session-4-inter-microservice-communication-async
