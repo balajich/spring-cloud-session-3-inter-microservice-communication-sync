@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: gateway
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+    gateway:
+      routes:
+        - id: employee-api
+          uri: lb://EMPLOYEE-API
+          predicates:
+            - Path=/employee/**
+        - id: payroll-api
+          uri: lb://PAYROLL-API
+          predicates:
+            - Path=/payroll/**
+        - id: report-api-direct
+          uri: lb://REPORT-API-DIRECT
+          predicates:
+            - Path=/report-api-direct/**
+        - id: report-api-via-gateway
+          uri: lb://REPORT-API-VIA-GATEWAY
+          predicates:
+            - Path=/report-api-via-gateway/**
+server:
+  port: 8080
