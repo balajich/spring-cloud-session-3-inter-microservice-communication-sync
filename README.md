@@ -14,7 +14,8 @@ In  this tutorial we are going to see how microservices communicate with each ot
     - report-api-via-gateway calls employee-api,payroll-api via gateway
 - **Note: In real world we favour to call microservices via a gateway even for inter communication. So I recommend using 
 the  microservice report-api-via-gateway**  
-Overview
+
+**Overview**
 - Run registry service on 8761. 
 - Run employee-api service on dynamic port. Where it takes employee id and returns employee name.
 - Run payroll-api service on dynamic port. Where it takes employee id and returns employee salary.
@@ -66,68 +67,52 @@ at spring-cloud-session-3-inter-microservice-communication-sync.postman_collecti
 - Get employee report using report-api-via-gateway: ``` curl -s -L  http://localhost:8080/report-api-via-gateway/100 ```
 **Note:  **
 # Code
-*Registry(Service Registry)* is a Spring Boot application that uses Eureka Server. Snippet of **RegistryApplication**
+In this section will focus only on report-api and how discovers employee-api,payroll-api. 
+*ReportController* in app report-api-direct. RestTemplate calls eureka ribbon client which fetches "employee-api,payroll-api" information from registry 
+and calls the microservices directly. The ** @LoadBalanced** annotation makes ribbon client to round-robbin requests if there are multiple instances of them.
 ```java
-@SpringBootApplication
-@EnableEurekaServer
-public class RegistryApplication {
+@Autowired
+    RestTemplate restTemplate;
 
-    public static void main(String[] args) {
-        SpringApplication.run(RegistryApplication.class, args);
-    }
-}
-```
-*Employee API* is a simple spring boot based rest-api. Snippet of **EmployeeController**
-```java
- // Initialize database
-    private static final Map<Integer, Employee> dataBase = new HashMap<>();
-    static {
-        dataBase.put(100, new Employee(100,"Alex"));
-        dataBase.put(101, new Employee(101,"Tom"));
-    }
-
-
-    @RequestMapping(value = "/employee/{employeeId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/report-api-direct/{employeeId}", method = RequestMethod.GET)
     public Employee getEmployeeDetails(@PathVariable int employeeId) {
-        logger.info(String.format("Getting Details of Employee with id %s",employeeId ));
-        return dataBase.get(employeeId);
+        logger.info(String.format("Getting Complete Details of Employee with id %s", employeeId));
+        //Get employee name from employee-api
+        Employee responseEmployeeNameDetails = restTemplate.getForEntity("http://employee-api/employee/" + employeeId, Employee.class).getBody();
+        //Get employee salary from payroll-api
+        Employee responseEmployeePayDetails = restTemplate.getForEntity("http://payroll-api/payroll/" + employeeId, Employee.class).getBody();
+        return new Employee(responseEmployeeNameDetails.getId(), responseEmployeeNameDetails.getName(), responseEmployeePayDetails.getSalary());
+    }
+
+    @Bean
+    @LoadBalanced
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 ```
-*Employee API* users Eureka Client , which discovers and registers with Server. Snippet of **EmployeeApiApplication**. It
-binds to random port and registers with Eureka Server using name,dynamic id and random value.
+*ReportController* in app report-api-via-gatewat=y. RestTemplate calls eureka ribbon client which fetches "gateway" information from registry 
+and calls the employee,payroll api via gateway. The ** @LoadBalanced** annotation makes ribbon client to round-robbin requests if there are multiple instances of them.
 ```java
-@SpringBootApplication
-@EnableEurekaClient
-public class EmployeeApiApplication {
+  @Autowired
+    RestTemplate restTemplate;
 
-    public static void main(String[] args) {
-        SpringApplication.run(EmployeeApiApplication.class, args);
+    @RequestMapping(value = "/report-api-via-gateway/{employeeId}", method = RequestMethod.GET)
+    public Employee getEmployeeDetails(@PathVariable int employeeId) {
+        logger.info(String.format("Getting Complete Details of Employee with id %s", employeeId));
+        //Get employee name from employee-api via gateway
+        Employee responseEmployeeNameDetails = restTemplate.getForEntity("http://gateway/employee/" + employeeId, Employee.class).getBody();
+        //Get employee salary from payroll-api via gateway
+        Employee responseEmployeePayDetails = restTemplate.getForEntity("http://gateway/payroll/" + employeeId, Employee.class).getBody();
+        return new Employee(responseEmployeeNameDetails.getId(), responseEmployeeNameDetails.getName(), responseEmployeePayDetails.getSalary());
     }
 
-}
-```
-Snippet of employee api **application.yml**
-```yaml
-server:
-  port: ${PORT:0}
-eureka:
-  instance:
-    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
-```
-*Gateway* is a Spring boot application which uses Spring Cloud Load Balancer for Client Side Load balancing and Eureka Client to
-discover healthy microservices. Snippet of **GatewayApplication**
-```java
-@SpringBootApplication
-@EnableEurekaClient
-public class GatewayApplication {
-
-    public static void main(String[] args) {
-        SpringApplication.run(GatewayApplication.class, args);
+    @Bean
+    @LoadBalanced
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
-
-}
 ```
-It is mainly configuration driven  **application.yml**  
+**Gateway**
 ```yaml
 cloud:
     loadbalancer:
@@ -143,13 +128,21 @@ cloud:
           uri: lb://PAYROLL-API
           predicates:
             - Path=/payroll/**
+        - id: report-api-direct
+          uri: lb://REPORT-API-DIRECT
+          predicates:
+            - Path=/report-api-direct/**
+        - id: report-api-via-gateway
+          uri: lb://REPORT-API-VIA-GATEWAY
+          predicates:
+            - Path=/report-api-via-gateway/**
 ```
 
 # Next Steps
-- How micoservice communicate with each other,Inter microservice communication
+- Inter microservice communication in asynchronous fashion
 
 # References
-- https://spring.io/projects/spring-cloud
-- https://en.wikipedia.org/wiki/Microservices
+- Spring Microservices in Action by John Carnell 
+- Hands-On Microservices with Spring Boot and Spring Cloud: Build and deploy Java microservices using Spring Cloud, Istio, and Kubernetes
 # Next Tutorial
-https://github.com/balajich/spring-cloud-microservices-hello-world-dynamic-ports
+https://github.com/balajich/spring-cloud-session-4-inter-microservice-communication-async
