@@ -16,6 +16,7 @@
         <module>employee-api</module>
         <module>payroll-api</module>
 		<module>report-api-direct</module>
+		<module>report-api-via-gateway</module>
         <module>gateway</module>
     </modules>
 
