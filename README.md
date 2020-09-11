@@ -8,7 +8,7 @@ In  this tutorial we are going to see how microservices communicate with each ot
     - Direct: Microservice A speaks with  Microservice B Directly
     - Via Gateway: Instead of taking directly, Microservice A speaks with  Microservice B via gateway 
 - This tutorial covers both the scenarios
-- We will be developing report api which gives employee name,salary by communicating with employee-api,payroll-api
+- We will be developing report api which gives employee name,salary by communicating with employee-api,payroll-api microservices.
 - For the purpose of this tutorial we developed two microservices
     - report-api-direct which calls employee-api,payroll-api directly
     - report-api-via-gateway calls employee-api,payroll-api via gateway
@@ -42,8 +42,11 @@ Spring Cloud Load balaner in gateway
 # Video
 [![Spring Cloud Session 2 Microservices Dynamic ports](https://img.youtube.com/vi/5WuallBaMnw/0.jpg)](https://www.youtube.com/watch?v=5WuallBaMnw)
 - https://youtu.be/5WuallBaMnw
-# Architecture
-![architecture](architecture.png "architecture")
+# Architecture Direct Communication between microservices
+![architecture direct](architecture.png "architecture direct")
+
+# Architecture via Gateway Communication between microservices
+![architecture via gateway](architecture-via-gateway.png "architecture via gateway")
 # Prerequisite
 - JDK 1.8 or above
 - Apache Maven 3.6.3 or above
