@@ -40,8 +40,8 @@ Spring Cloud Load balaner in gateway
 # Source Code 
 ``` git clone https://github.com/balajich/spring-cloud-session-3-inter-microservice-communication-sync.git``` 
 # Video
-[![Spring Cloud Session 2 Microservices Dynamic ports](https://img.youtube.com/vi/5WuallBaMnw/0.jpg)](https://www.youtube.com/watch?v=5WuallBaMnw)
-- https://youtu.be/5WuallBaMnw
+[![Spring Cloud Session 3 Inter Microservice Communication Synchronous](https://img.youtube.com/vi/MqD0vLwFDaQ/0.jpg)](https://www.youtube.com/watch?v=MqD0vLwFDaQ)
+- https://youtu.be/MqD0vLwFDaQ
 # Architecture Direct Communication between microservices
 ![architecture direct](architecture.png "architecture direct")
 
